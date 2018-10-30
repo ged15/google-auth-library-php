@@ -72,10 +72,12 @@ class MemoryCacheItemPoolTest extends TestCase
         $this->pool->save($item);
         self::assertTrue($item->isHit());
 
+        $expiresAfter = 1800;
+
         Clock::setTime($fiftyPastOne);
         $item = new Item($key);
         $item->set($value);
-        $item->expiresAfter(1800);
+        $item->expiresAfter($expiresAfter);
         $this->pool->save($item);
 
 //        var_dump($this->pool);
@@ -106,9 +108,13 @@ class MemoryCacheItemPoolTest extends TestCase
 
         Clock::setTime($twoAm);
 
-        self::assertTrue($this->pool->hasItem($key));
+        self::assertGreaterThan(
+            $expiresAfter,
+            (clone Clock::now())->getTimestamp() - (clone $fiftyPastOne)->getTimestamp(),
+            'This proves that item should have expired.'
+        );
+
         $item = $this->pool->getItem($key);
-//        var_dump($item);
         self::assertFalse($item->isHit());
 
         date_default_timezone_set($defaultTimezone);
