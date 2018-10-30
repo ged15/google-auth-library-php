@@ -74,6 +74,7 @@ final class Item implements CacheItemInterface
     public function isHit()
     {
         if (!$this->isHit) {
+//            var_dump('no isHit');
             return false;
         }
 
@@ -81,6 +82,7 @@ final class Item implements CacheItemInterface
             return true;
         }
 
+//        echo "checking expiration\n";
         return new \DateTime() < $this->expiration;
     }
 
@@ -125,6 +127,12 @@ final class Item implements CacheItemInterface
      */
     public function expiresAfter($time)
     {
+//        if ($time === null) {
+//            $this->expiration = $time;
+//        } else {
+//            $this->expiration = Clock::after($time);
+//        }
+
         if (is_int($time)) {
             $this->expiration = new \DateTime("now + $time seconds");
         } elseif ($time instanceof \DateInterval) {
