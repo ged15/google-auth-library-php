@@ -6,12 +6,20 @@ final class Clock
 {
     private static $currentTime;
 
-    public static function now(): \DateTime
+    /**
+     * @return \DateTime
+     */
+    public static function now()
     {
-        return self::$currentTime !== null ? self::$currentTime : new \DateTime();
+        return self::$currentTime !== null ? clone self::$currentTime : new \DateTime();
     }
 
-    public static function after($seconds): \DateTime
+    /**
+     * @param int|\DateInterval $seconds
+     * @throws \InvalidArgumentException When $seconds is not an integer or \DateInterval.
+     * @return \DateTime
+     */
+    public static function after($seconds)
     {
         if (is_int($seconds)) {
             $diff = new \DateInterval("PT{$seconds}S");

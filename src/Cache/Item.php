@@ -74,7 +74,6 @@ final class Item implements CacheItemInterface
     public function isHit()
     {
         if (!$this->isHit) {
-//            var_dump('no isHit');
             return false;
         }
 
@@ -82,8 +81,7 @@ final class Item implements CacheItemInterface
             return true;
         }
 
-//        echo "checking expiration\n";
-        return new \DateTime() < $this->expiration;
+        return Clock::now() < $this->expiration;
     }
 
     /**
@@ -127,24 +125,18 @@ final class Item implements CacheItemInterface
      */
     public function expiresAfter($time)
     {
-//        if ($time === null) {
-//            $this->expiration = $time;
-//        } else {
-//            $this->expiration = Clock::after($time);
-//        }
-
-        if (is_int($time)) {
-            $this->expiration = new \DateTime("now + $time seconds");
-        } elseif ($time instanceof \DateInterval) {
-            $this->expiration = (new \DateTime())->add($time);
-        } elseif ($time === null) {
+        if ($time === null) {
             $this->expiration = $time;
         } else {
-            $message = 'Argument 1 passed to %s::expiresAfter() must be an ' .
-                       'instance of DateInterval or of the type integer, %s given';
-            $error = sprintf($message, get_class($this), gettype($time));
+            try {
+                $this->expiration = Clock::after($time);
+            } catch (\InvalidArgumentException $e) {
+                $message = 'Argument 1 passed to %s::expiresAfter() must be an ' .
+                           'instance of DateInterval or of the type integer, %s given';
+                $error = sprintf($message, get_class($this), gettype($time));
 
-            $this->handleError($error);
+                $this->handleError($error);
+            }
         }
 
         return $this;
