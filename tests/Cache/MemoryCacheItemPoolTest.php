@@ -65,7 +65,6 @@ class MemoryCacheItemPoolTest extends TestCase
 
         $key = 'item';
         $value = 'value';
-//        $this->saveItem($key, 'value');
 
         $item = new Item($key);
         $item->set($value);
@@ -79,32 +78,6 @@ class MemoryCacheItemPoolTest extends TestCase
         $item->set($value);
         $item->expiresAfter($expiresAfter);
         $this->pool->save($item);
-
-//        var_dump($this->pool);
-
-//        var_dump($this->pool->getItem($key));
-
-//        var_dump($midnight->getTimestamp());
-//        var_dump((clone $midnight)->setTimezone(new \DateTimeZone('UTC'))->getTimestamp());
-
-//        var_dump($oneAm->getTimestamp());
-//        var_dump((clone $oneAm)->setTimezone(new \DateTimeZone('UTC'))->getTimestamp());
-//
-//        var_dump($twoAm->getTimestamp());
-//        var_dump((clone $twoAm)->setTimezone(new \DateTimeZone('UTC'))->getTimestamp());
-//
-//        var_dump($threeAm->getTimestamp());
-//        var_dump((clone $threeAm)->setTimezone(new \DateTimeZone('UTC'))->getTimestamp());
-//        echo (clone $twoAm)->setTimezone(new \DateTimeZone('UTC'))->getTimestamp();
-
-//        echo "\n", (new \DateTime('2018-10-27 21:05:00'))->getOffset(), "\n";
-//        echo "\n", (new \DateTime('2018-10-27 22:05:00'))->getOffset(), "\n";
-//        echo "\n", (new \DateTime('2018-10-27 23:05:00'))->getOffset(), "\n";
-//        echo "\n", (new \DateTime('2018-10-28 00:00:00'))->getOffset(), "\n";
-//        echo "\n", $oneAm->getOffset(), "\n";
-//        echo "\n", (new \DateTime('2018-10-28 01:59:59'))->getOffset(), "\n";
-//        echo "\n", $twoAm->getOffset(), "\n";
-//        echo "\n", (new \DateTime('2018-10-28 03:05:00'))->getOffset(), "\n";
 
         Clock::setTime($twoAm);
 
