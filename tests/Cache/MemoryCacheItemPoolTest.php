@@ -17,8 +17,6 @@
 
 namespace Google\Auth\Tests;
 
-use Google\Auth\Cache\Clock;
-use Google\Auth\Cache\Item;
 use Google\Auth\Cache\MemoryCacheItemPool;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\InvalidArgumentException;
@@ -49,48 +47,6 @@ class MemoryCacheItemPoolTest extends TestCase
         $this->assertInstanceOf('Google\Auth\Cache\Item', $item);
         $this->assertNull($item->get());
         $this->assertFalse($item->isHit());
-    }
-
-    public function testItemExpirationDuringChangeOfDst()
-    {
-        $defaultTimezone = date_default_timezone_get();
-        date_default_timezone_set('CET');
-
-        $oneAm = new \DateTime('2018-10-28 01:00:00');
-        $fiftyPastOne = new \DateTime('2018-10-28 01:50:00');
-        $twoAm = new \DateTime('2018-10-28 02:00:00');
-        $threeAm = new \DateTime('2018-10-28 03:00:00');
-
-        Clock::setTime($oneAm);
-
-        $key = 'item';
-        $value = 'value';
-
-        $item = new Item($key);
-        $item->set($value);
-        $this->pool->save($item);
-        self::assertTrue($item->isHit());
-
-        $expiresAfter = 1800;
-
-        Clock::setTime($fiftyPastOne);
-        $item = new Item($key);
-        $item->set($value);
-        $item->expiresAfter($expiresAfter);
-        $this->pool->save($item);
-
-        Clock::setTime($twoAm);
-
-        self::assertGreaterThan(
-            $expiresAfter,
-            Clock::now()->getTimestamp() - $fiftyPastOne->getTimestamp(),
-            'This proves that item should have expired.'
-        );
-
-        $item = $this->pool->getItem($key);
-        self::assertFalse($item->isHit());
-
-        date_default_timezone_set($defaultTimezone);
     }
 
     public function testGetsExistingItem()

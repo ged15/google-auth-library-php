@@ -81,7 +81,7 @@ final class Item implements CacheItemInterface
             return true;
         }
 
-        return Clock::now() < $this->expiration;
+        return Clock::now()->getTimestamp() < (clone $this->expiration)->getTimestamp();
     }
 
     /**

@@ -19,10 +19,10 @@ final class Clock
      * @throws \InvalidArgumentException When $seconds is not an integer or \DateInterval.
      * @return \DateTime
      */
-    public static function after($seconds)
+    public static function after($time)
     {
-        if (is_int($seconds)) {
-            $diff = new \DateInterval("PT{$seconds}S");
+        if (is_int($time)) {
+            $diff = new \DateInterval("PT{$time}S");
         } elseif ($time instanceof \DateInterval) {
             $diff = $time;
         } else {
