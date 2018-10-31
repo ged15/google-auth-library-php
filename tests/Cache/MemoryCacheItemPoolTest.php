@@ -83,7 +83,7 @@ class MemoryCacheItemPoolTest extends TestCase
 
         self::assertGreaterThan(
             $expiresAfter,
-            (clone Clock::now())->getTimestamp() - (clone $fiftyPastOne)->getTimestamp(),
+            Clock::now()->getTimestamp() - $fiftyPastOne->getTimestamp(),
             'This proves that item should have expired.'
         );
 
